@@ -1,0 +1,31 @@
+<main class="form-box">
+    <form id="login-form">
+        {{>Heading type="h2" text="Регистрация"}}
+        <div class="form-item">
+            {{> Input id="email" name="email" type="email" placeholder="E-mail"}}
+        </div>
+        <div class="form-item">
+            {{> Input id="login" name="login" type="text" placeholder="Логин"}}
+        </div>
+        <div class="form-item">
+            {{> Input id="first-name" name="first_name" type="text" placeholder="Имя"}}
+        </div>
+        <div class="form-item">
+            {{> Input id="second-name" name="second_name" type="text" placeholder="Фамилия"}}
+        </div>
+        <div class="form-item">
+            {{> Input id="phone" name="phone" type="tel" placeholder="Телефон"}}
+        </div>
+        <div class="form-item">
+            {{> Input id="password" name="password" type="password" placeholder="Пароль"}}
+        </div>
+        <div class="form-item">
+            {{> Input id="password-repeat" name="password_repeat" type="password" placeholder="Пароль ещё раз"}}
+        </div>
+        <div class="form-actions">
+            {{> Button type="submit" text="Зарегистрироваться" class="btn"}}
+            <a id="loginPage" class="page-link">Войти</a>
+        </div>
+    </form>
+</main>
+{{>Aside}}
