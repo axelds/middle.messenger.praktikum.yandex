@@ -1,8 +1,11 @@
 ## Описание проекта
+
 Название: Проект "Messenger 13"
+
 Чат-приложение.
 
 Адрес проекта на Netlify: https://messenger-13.netlify.app/
+
 Макет (прототипы) в Figma: https://www.figma.com/design/Db9HBj3PBbHMZccyXSoF8Y/Messenger-13
 
 ## Установка
