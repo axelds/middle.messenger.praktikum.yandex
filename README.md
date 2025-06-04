@@ -13,11 +13,10 @@
 ## Установка
 ```shell
 npm install
-npm run start
 ```
 **Cборка проекта:**
 ```shell
-npm run build
+npm run start
 ```
 ## Страницы проекта
 На первом этапе навигация выведена в сайдбар. 
