@@ -14,7 +14,7 @@
 ```shell
 npm install
 ```
-**Cборка проекта:**
+**Cборка и запуск проекта:**
 ```shell
 npm run start
 ```
