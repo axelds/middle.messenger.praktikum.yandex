@@ -8,4 +8,4 @@ export default `<aside class="sidebar">
     <li><a id="notfoundPage" class="page-link">400</a></li>
     <li><a id="serverPage" class="page-link">5xxx</a></li>
   </ul>
-</aside>`
+</aside>`;
