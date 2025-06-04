@@ -1,11 +1,11 @@
 export default `<aside class="sidebar">
 <h2>Навигация по страницам</h2>
-  <ul>
-    <li><a id="loginPage" class="page-link">Авторизация</a></li>
-    <li><a id="registerPage" class="page-link">Регистрация</a></li>
-    <li><a id="chatsPage" class="page-link">Список чатов и лента переписки</a></li>
-    <li><a id="profilePage" class="page-link">Профиль</a></li>
-    <li><a id="notfoundPage" class="page-link">400</a></li>
-    <li><a id="serverPage" class="page-link">5xxx</a></li>
-  </ul>
+  <nav>
+    <a id="loginPage" class="page-link">Авторизация</a>
+    <a id="registerPage" class="page-link">Регистрация</a>
+    <a id="chatsPage" class="page-link">Список чатов и лента переписки</a>
+    <a id="profilePage" class="page-link">Профиль</a>
+    <a id="notfoundPage" class="page-link">400</a>
+    <a id="serverPage" class="page-link">5xxx</a>
+  </nav>
 </aside>`;
