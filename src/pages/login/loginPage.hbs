@@ -1,0 +1,16 @@
+<main class="form-box">
+    <form id="login-form">
+        {{>Heading type="h2" text="Вход"}}
+        <div class="form-item">
+            {{> Input id="login" name="login" type="text" placeholder="Логин"}}
+        </div>
+        <div class="form-item">
+            {{> Input id="password" name="password" type="password" placeholder="Пароль"}}
+        </div>
+        <div class="form-actions">
+            {{> Button type="submit" text="Авторизоваться" class="btn"}}
+            <a id="lostPassword">Забыли пароль?</a>
+        </div>
+    </form>
+</main>
+{{>Aside}}

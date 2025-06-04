@@ -1,0 +1,45 @@
+<main class="profile">
+    {{>Heading type="h2" text="Профиль"}}
+    <form>
+        <div class="form-item form-avatar">
+            {{> Avatar src="/images/avatar-default.svg" name="Иван Петров"}}
+            {{> Input id="avatar" name="avatar" type="file" placeholder="Фото профиля"}}
+        </div>
+        <div class="form-item">
+            {{> Label for="email" text="Почта"}}
+            {{> Input id="email" name="email" type="email" placeholder="E-mail" value="pochta@yandex.ru"}}
+        </div>
+        <div class="form-item">
+            {{> Label for="login" text="Логин"}}
+            {{> Input id="login" name="email" type="text" placeholder="Логин" value="axelds"}}
+        </div>
+        <div class="form-item">
+            {{> Label for="first_name" text="Имя"}}
+            {{> Input id="first_name" name="first_name" type="text" placeholder="Имя" value="Ivan"}}
+        </div>
+        <div class="form-item">
+            {{> Label for="second_name" text="Фамилия"}}
+            {{> Input id="second_name" name="second_name" type="text" placeholder="Фамилия" value="Petrov"}}
+        </div>
+        <div class="form-item">
+            {{> Label for="display_name" text="Имя в чате"}}
+            {{> Input id="display_name" name="display_name" type="text" placeholder="Имя в чате" value="Ivan Petrov"}}
+        </div>
+        <div class="form-item">
+            {{> Label for="phone" text="Телефон"}}
+            {{> Input id="phone" name="phone" type="tel" placeholder="Телефон" value="+7 (999) 999-99-99"}}
+        </div>
+        <div class="form-item">
+            {{> Label for="oldPassword" text="Старый пароль"}}
+            {{> Input id="oldPassword" name="oldPassword" type="password" placeholder="Старый пароль" value=""}}
+        </div>
+        <div class="form-item">
+            {{> Label for="newPassword" text="Новый пароль"}}
+            {{> Input id="newPassword" name="newPassword" type="password" placeholder="Новый пароль" value=""}}
+        </div>
+        <div class="form-actions">
+            {{> Button type="submit" text="Сохранить" class="btn"}}
+        </div>
+    </form>
+</main>
+{{>Aside}}
