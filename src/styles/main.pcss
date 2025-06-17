@@ -2,7 +2,9 @@
 :root {
     --color: #1E1E1E;
     --background: #fff;
-    --primary: #0891b2
+    --primary: #0891b2;
+    --inputColor: #999999;
+    --borderColor: #EAEAEA;
 }
 * {
     box-sizing: border-box;
@@ -24,13 +26,6 @@ a {
     &:hover {
         text-decoration: underline
     }
-}
-#app {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
 }
 h2, h3 {
     font-weight: 500;
@@ -57,6 +52,18 @@ aside {
     padding: 25px;
     z-index: 10;
 }
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#app {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
 .btn {
     width: 100%;
     padding: 10px 25px;
@@ -71,82 +78,5 @@ aside {
 
     &:hover {
         opacity: 0.8;
-    }
-}
-.form-box {
-    padding: 30px;
-    width: 100%;
-    max-width: 340px;
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.14);
-    border-radius: 12px;
-
-    h2 {
-        margin-bottom: 40px;
-    }
-
-    .form-item {
-        margin-bottom: 16px;
-    }
-
-    .form-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-        text-align: center;
-        margin-top: 50px;
-        
-        a {
-            font-weight: 500;
-            font-size: 13px;
-        }
-    }
-}
-
-.profile {
-    width: 100%;
-    padding: 50px 0px;
-
-    form {
-        width: 100%;
-        max-width: 510px;
-        margin: 0 auto;
-    }
-
-    .form-item {
-        display: flex;
-        justify-content: space-between;    
-        align-items: center;
-        border-bottom: 1px solid #EAEAEA;
-        padding: 10px 0px;
-
-        &.form-avatar {
-            padding-bottom: 30px
-        }
-
-        label {
-            font-weight: 500;
-        }
-        
-        input {
-            border: 0px;
-            width: 200px;
-            color: #999999;
-        }
-    }
-
-    .form-actions {
-        margin-top: 50px;
-    }
-}
-
-.error-page {
-
-    h2 {
-        font-size: 40px;
-        margin-bottom: 0px;
-    }
-
-    h3 {
-        margin-bottom: 60px;
     }
 }
