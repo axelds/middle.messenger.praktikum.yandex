@@ -10,3 +10,4 @@ Variable declaration
 
 * Each var statement should have only
   one variable declared in it.
+  
