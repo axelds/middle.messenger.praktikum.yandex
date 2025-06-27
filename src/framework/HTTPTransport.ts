@@ -13,7 +13,7 @@ type RequestOptions = {
 
 type RequestOptionsWithoutMethod = Omit<RequestOptions, 'method'>;
 
-class HttpTransport {
+export default class HttpTransport {
   get(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
     return this.request(url, { ...options, method: HttpMethod.GET });
   }

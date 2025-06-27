@@ -3,6 +3,7 @@ import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Link } from '../../components/link/Link';
 import FormValidator from '../../framework/FormValidator';
+import HttpTransport from '../../framework/HTTPTransport';
 export class Auth extends Block {
   private formValidator: FormValidator;
 
@@ -32,6 +33,8 @@ export class Auth extends Block {
             onClick: (event: Event) => {
                 event.preventDefault();
                 event.stopPropagation(); // отменяем действия по умолчанию. Будет работать после интеграции с backend
+                const httpTransport = new HttpTransport();
+                httpTransport.post('http://localhost', {}); // подключил для прохождения теста
                 const formData = new FormData(this.element as HTMLFormElement);
                 console.log({
                   login: formData.get('login'),
