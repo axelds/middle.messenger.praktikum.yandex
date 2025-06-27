@@ -7,7 +7,7 @@ export default class EventBus {
     constructor() {
         this.listeners = {};
     }
-
+    
     /**
      * Registers a callback function to an event.
      *

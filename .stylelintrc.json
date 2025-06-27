@@ -1,0 +1,17 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "rule-empty-line-before": null,
+    "custom-property-pattern": null,
+    "length-zero-no-unit": null,
+    "alpha-value-notation": null,
+    "color-hex-length": null,
+    "color-function-alias-notation": null,
+    "color-function-notation": null,
+    "font-family-name-quotes": null,
+    "selector-class-pattern": null
+  },
+  "ignoreFiles": [
+    "build/*"
+  ]
+} 

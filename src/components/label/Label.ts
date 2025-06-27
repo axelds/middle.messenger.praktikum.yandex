@@ -1,13 +1,13 @@
 import Block from '../../framework/Block';
 
 export class Label extends Block {
-  constructor(props: object) {
-    super({
-      ...props,
-    });
-  }
+    constructor(props: object) {
+        super({
+        ...props,
+        });
+    }
 
-  override render() {
-    return '<label for="{{id}}">{{text}}</label>';
-  }
+    override render() {
+        return '<label for="{{id}}">{{text}}</label>';
+    }
 }

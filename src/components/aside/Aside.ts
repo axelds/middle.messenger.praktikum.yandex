@@ -55,7 +55,7 @@ export class Aside extends Block {
         });
     }
 
-    override render(): string {
+    override render() {
         return `<aside class="sidebar">
         <h2>Навигация по страницам</h2>
             <nav>

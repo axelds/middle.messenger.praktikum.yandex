@@ -75,7 +75,7 @@ export default class Block {
         this._render();
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     protected componentDidUpdate(oldProps: BlockProps, newProps: BlockProps): boolean {
         console.log(oldProps, newProps);
         return true;
@@ -96,7 +96,7 @@ export default class Block {
         } else if (Array.isArray(value)) {
             lists[key] = value;
         } else {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+             
             props[key] = value;
         }
         });
