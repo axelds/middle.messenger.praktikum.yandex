@@ -11,12 +11,8 @@ export class Profile extends Block {
     super({
         ...props,
         Avatar: new Avatar({
-            props: {
-                src: '/images/avatar-default.svg',
-                name: 'avatar',
-                onClick: () => {
-                }
-            }
+            src: '/images/avatar-default.svg',
+            name: 'avatar',
         }),
         InputAvatar: new Input({
             id: 'avatar',
