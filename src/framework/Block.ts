@@ -5,7 +5,7 @@ interface BlockProps {
     [key: string]: any;
 }
 
-export default class Block {
+export default abstract class Block {
     static EVENTS = {
         INIT: 'init',
         FLOW_CDM: 'flow:component-did-mount',
@@ -25,7 +25,7 @@ export default class Block {
 
     protected eventBus: () => EventBus;
 
-    constructor(propsWithChildren: BlockProps = {}) {
+    constructor(propsWithChildren: BlockProps = {} as BlockProps) {
         const eventBus = new EventBus();
         const { props, children, lists } = this._getChildrenPropsAndProps(propsWithChildren);
         this.props = this._makePropsProxy({ ...props });
@@ -42,6 +42,13 @@ export default class Block {
         if (this._element) {
             this._element.addEventListener(eventName, events[eventName]);
         }
+        });
+    }
+
+    private _removeEvents(): void {
+        const events = this.props.events || {};
+        Object.keys(events).forEach(eventName => {
+        this._element?.removeEventListener(eventName, events[eventName]);
         });
     }
 
@@ -177,6 +184,8 @@ export default class Block {
             stub.replaceWith(listCont.content);
         }
         });
+
+        this._removeEvents();
 
         const newElement = fragment.content.firstElementChild as HTMLElement;
         if (this._element && newElement) {

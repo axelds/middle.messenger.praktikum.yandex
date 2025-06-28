@@ -2,7 +2,7 @@
     width: 100%;
     padding: 0px 15px;
     margin-top: auto;
-    border-top: 1px solid #EAEAEA;
+    border-top: 1px solid var(--borderColor);
 }
 
 .chat-send_message {
@@ -14,18 +14,18 @@
     input {
         width: 100%;
         height: 32px;
-        background: #EFEFEF;
+        background: var(--chatInputBackgroundColor);
         border-radius: 30px;
-        border: 1px solid #EFEFEF;
+        border: 1px solid var(--chatInputBackgroundColor);
         padding: 5px 20px;
         outline: none;
         box-shadow: unset;
-        color: #333;
+        color: var(--chatInputColor);;
         font-size: 16px;
         resize: none;
 
         &::placeholder {
-            color: #999999;
+            color: var(--chatInputPlaceholderColor);
             opacity: 1;
         }
 

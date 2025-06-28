@@ -16,7 +16,8 @@ export class Registration extends Block {
             name: 'email',
             type: 'mail',
             placeholder: 'E-mail',
-            onBlur: () => {
+            onBlur: (event: Event) => {
+                this.formValidator.validateInput(event.target as HTMLInputElement);
             },
         }),
         InputLogin: new Input({
@@ -24,7 +25,8 @@ export class Registration extends Block {
             name: 'login',
             type: 'text',
             placeholder: 'Логин',
-            onBlur: () => {
+            onBlur: (event: Event) => {
+                this.formValidator.validateInput(event.target as HTMLInputElement);
             },
         }),
         InputFirstName: new Input({
@@ -32,7 +34,8 @@ export class Registration extends Block {
             name: 'first_name',
             type: 'text',
             placeholder: 'Имя',
-            onBlur: () => {
+            onBlur: (event: Event) => {
+                this.formValidator.validateInput(event.target as HTMLInputElement);
             },
         }),
         InputSecondName: new Input({
@@ -40,7 +43,8 @@ export class Registration extends Block {
             name: 'second_name',
             type: 'text',
             placeholder: 'Фамилия',
-            onBlur: () => {
+            onBlur: (event: Event) => {
+                this.formValidator.validateInput(event.target as HTMLInputElement);
             },
         }),
         InputPhone: new Input({
@@ -48,7 +52,8 @@ export class Registration extends Block {
             name: 'phone',
             type: 'tel',
             placeholder: 'Телефон',
-            onBlur: () => {
+            onBlur: (event: Event) => {
+                this.formValidator.validateInput(event.target as HTMLInputElement);
             },
         }),
         InputPassword: new Input({
@@ -56,7 +61,8 @@ export class Registration extends Block {
             name: 'password',
             type: 'password',
             placeholder: 'Пароль',
-            onBlur: () => {
+            onBlur: (event: Event) => {
+                this.formValidator.validateInput(event.target as HTMLInputElement);
             },
         }),
         InputPasswordRepeat: new Input({
@@ -64,7 +70,8 @@ export class Registration extends Block {
             name: 'password_repeat',
             type: 'password',
             placeholder: 'Пароль ещё раз',
-            onBlur: () => {
+            onBlur: (event: Event) => {
+                this.formValidator.validateInput(event.target as HTMLInputElement);
             },
         }),
         Button: new Button({
@@ -74,6 +81,7 @@ export class Registration extends Block {
             onClick: (event: Event) => {
                 event.preventDefault();
                 event.stopPropagation(); // отменяем действия по умолчанию. Будет работать после интеграции с backend
+                this.formValidator.validateForm(event as SubmitEvent, this.element as HTMLFormElement);
                 const formData = new FormData(this.element as HTMLFormElement);
                 console.log({
                     email: formData.get('email'),
@@ -97,7 +105,6 @@ export class Registration extends Block {
         })
     });
     this.formValidator = new FormValidator();
-    this.formValidator.addForm(this.props.id, (this.element as HTMLFormElement));
   }
 
   override render() {

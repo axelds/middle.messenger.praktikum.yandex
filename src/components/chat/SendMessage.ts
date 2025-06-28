@@ -13,7 +13,8 @@ export class SendMessage extends Block {
                 name: 'message',
                 type: 'text',
                 placeholder: 'Сообщение',
-                onBlur: () => {
+                onBlur: (event: Event) => {
+                    this.formValidator.validateInput(event.target as HTMLInputElement);
                 },
             }),
             Button: new Button({
@@ -23,15 +24,15 @@ export class SendMessage extends Block {
                 onClick: (event: Event) => {
                     event.preventDefault();
                     event.stopPropagation(); // отменяем действия по умолчанию. Будет работать после интеграции с backend
+                    this.formValidator.validateForm(event as SubmitEvent, this.element as HTMLFormElement);
                     const formData = new FormData(this.element as HTMLFormElement);
-                    console.log({
-                    message: formData.get('message'),
+                        console.log({
+                        message: formData.get('message'),
                     });
                 },
             })
         });
         this.formValidator = new FormValidator();
-        this.formValidator.addForm(this.props.id, (this.element as HTMLFormElement));
     }
 
     override render() {
