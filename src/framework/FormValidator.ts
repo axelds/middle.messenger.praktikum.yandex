@@ -1,5 +1,4 @@
 export default class FormValidator {
-    private forms: { [key: string]: HTMLFormElement };
     private validationRules: {
         [key: string]: {
         [key: string]: RegExp
@@ -7,7 +6,6 @@ export default class FormValidator {
     };
 
     constructor() {
-        this.forms = {};
         this.validationRules = {
             authorization: {
                 login: /^[a-zA-Z][a-zA-Z0-9_-]{2,19}$/,
