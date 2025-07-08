@@ -5,6 +5,10 @@
     --primary: #0891b2;
     --inputColor: #999999;
     --borderColor: #EAEAEA;
+    --errorColor: #FF0000;
+    --chatInputColor: #333;
+    --chatInputBackgroundColor: #EFEFEF;
+    --chatInputPlaceholderColor: #999999;
 }
 * {
     box-sizing: border-box;
@@ -43,7 +47,11 @@ input {
     border-bottom: 1px solid var(--primary);
     font-weight: 500;
     font-size: 16px;
-    background: none
+    background: none;
+
+    &.invalid {
+        border-color: var(--errorColor);
+    }
 }
 aside {
     position: fixed;

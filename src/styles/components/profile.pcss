@@ -27,6 +27,15 @@
             border: 0px;
             width: 200px;
             color: var(--inputColor);
+
+            &.invalid {
+                color: var(--errorColor);
+
+                &::placeholder {
+                    color: var(--errorColor);
+                    opacity: 1;
+                }
+            }
         }
     }
 

@@ -10,6 +10,10 @@
 
 Макет (прототипы) в Figma: https://www.figma.com/design/Db9HBj3PBbHMZccyXSoF8Y/Messenger-13
 
+Проект переведен на TypeScript.
+
+Приложиние соответствует шаблону MVC. Добавлена валидация форм.
+
 ## Установка
 ```shell
 npm install
