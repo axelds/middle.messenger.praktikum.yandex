@@ -28,6 +28,10 @@ export default class ShowRouter {
     }
 
     _onRoute(pathname: string) {
+        if ((pathname === '/messenger' || pathname === '/settings') && !localStorage.getItem('isAuth')) {
+            this.go('/');
+            return;
+        }
         const route = this.getRoute(pathname);
         if (!route) {
             this.go('/404');
