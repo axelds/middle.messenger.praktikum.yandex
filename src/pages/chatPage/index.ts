@@ -1,7 +1,6 @@
 import '/src/styles/components/chat.pcss';
 import Block from '../../framework/Block';
 import { SendMessage } from '../../components/chat/SendMessage';
-import ShowRouter from '../../framework/ShowRouter';
 import { AuthAPI } from '../../api/auth-api';
 import { ChatAPI } from '../../api/chat-api';
 import { ProfileAPI } from '../../api/profile-api';
@@ -17,9 +16,7 @@ import { SearchChat } from '../../components/chat/SearchChat';
 import { AddAvatar } from '../../components/chat/AddAvatar';
 import { API_URLS } from '../../framework/Constants';
 import type { initState, SearchUserByLoginType } from '../../framework/Types';
-import { checkAuth } from '../../helpers/checkAuth';
 
-const router = new ShowRouter();
 const authAPI = new AuthAPI();
 const chatAPI = new ChatAPI();
 const profileAPI = new ProfileAPI();

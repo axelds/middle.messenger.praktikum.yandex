@@ -2,9 +2,6 @@ import '/src/styles/components/auth.pcss';
 import Block from '../../framework/Block';
 import { Auth } from '../../components/auth/Auth';
 import { Heading } from '../../components/heading/Heading';
-import ShowRouter from '../../framework/ShowRouter';
-
-const router = new ShowRouter();
 
 export class LoginPage extends Block {
 	constructor() {
