@@ -220,7 +220,7 @@ export class ChatPage extends Block {
                 }
             }),
             SearchChat: new SearchChat({
-                id: 'searchChat',
+                id: 'search-chat',
                 onSubmit: (event: Event) => {
                     event.preventDefault();
                     event.stopPropagation();
