@@ -4,8 +4,18 @@
     --background: #fff;
     --primary: #0891b2;
     --inputColor: #999999;
+    --grayColor: #999999;
     --borderColor: #EAEAEA;
     --errorColor: #FF0000;
+    --chatInputColor: #333;
+    --chatInputBackgroundColor: #EFEFEF;
+    --chatInputPlaceholderColor: #999999;
+    --backBackground: #FBFBFB;
+    --backBackgroundHover: #F5F5F5;
+    --backBorderColor: #eaeaea;
+    --popupBackground: #fff;
+    --messageBg: #F8F8F8;
+    --messageBgMe: #E4EDFD;
 }
 * {
     box-sizing: border-box;
@@ -50,19 +60,12 @@ input {
         border-color: var(--errorColor);
     }
 }
-aside {
-    position: fixed;
-    top: 0px;
-    right: 0px;
-    padding: 25px;
-    z-index: 10;
-}
 nav {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-#app {
+#page {
     position: relative;
     display: flex;
     align-items: center;
@@ -83,5 +86,29 @@ nav {
 
     &:hover {
         opacity: 0.8;
+    }
+}
+.go-back {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    z-index: 10;
+
+    a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 18px;
+        background: var(--backBackground);
+        border-right: 1px solid var(--backBorderColor);
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--backBackgroundHover);
+        }
     }
 }

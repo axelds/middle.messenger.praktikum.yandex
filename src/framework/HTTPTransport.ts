@@ -1,52 +1,62 @@
-enum HttpMethod {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
+enum METHODS {
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    PATCH = 'PATCH',
+    DELETE = 'DELETE',
 }
 
 type RequestOptions = {
-  method: HttpMethod;
-  data?: any;
+    method: string;
+    data?: any;
+    headers?: Record<string, string>;
 }
 
-type RequestOptionsWithoutMethod = Omit<RequestOptions, 'method'>;
+type HTTPMethod = <R=unknown>(url: string, options?: RequestOptions) => Promise<R>;
 
-class HttpTransport {
-  get(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-    return this.request(url, { ...options, method: HttpMethod.GET });
-  }
+export default class HttpTransport {
+    get: HTTPMethod = (url, options) => this.request(url, { ...options, method: METHODS.GET });
+    post: HTTPMethod = (url, options) => this.request(url, { ...options, method: METHODS.POST });
+    put: HTTPMethod = (url, options) => this.request(url, { ...options, method: METHODS.PUT });
+    patch: HTTPMethod = (url, options) => this.request(url, { ...options, method: METHODS.PATCH });
+    delete: HTTPMethod = (url, options) => this.request(url, { ...options, method: METHODS.DELETE });
 
-  post(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-    return this.request(url, { ...options, method: HttpMethod.POST });
-  }
+    request<R>(url: string, options: RequestOptions = { method: METHODS.GET }): Promise<R> {
+        const { method, data, headers } = options;
 
-  put(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-    return this.request(url, { ...options, method: HttpMethod.PUT });
-  }
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open(method, url);
 
-  delete(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-    return this.request(url, { ...options, method: HttpMethod.DELETE });
-  }
+            if (headers) {
+                Object.entries(headers).forEach(([key, value]) => {
+                    xhr.setRequestHeader(key, value);
+                });
+            }
 
-  request(url: string, options: RequestOptions = { method: HttpMethod.GET }): Promise<XMLHttpRequest> {
-    const { method, data } = options;
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const responseData = xhr.response;
+                    resolve(responseData as R);
+                } else {
+                    reject(xhr.statusText);
+                }
+            };
 
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open(method, url);
+            xhr.withCredentials = true;
 
-      xhr.onload = () => resolve(xhr);
-      xhr.onabort = reject;
-      xhr.onerror = reject;
-      xhr.ontimeout = reject;
+            xhr.onabort = reject;
+            xhr.onerror = reject;
+            xhr.ontimeout = reject;
 
-      if (method === HttpMethod.GET || !data) {
-        xhr.send();
-      } else {
-        xhr.send(data);
-      }
-    });
-  }
+            if (method === METHODS.GET || !data) {
+                xhr.send();
+            } else if (method === METHODS.PUT && data instanceof FormData) {
+                xhr.send(data);
+            } else {
+                xhr.send(JSON.stringify(data));
+            }
+        });
+    }
 }
+

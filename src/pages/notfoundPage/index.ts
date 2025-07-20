@@ -1,12 +1,10 @@
 import '/src/styles/components/errors.pcss';
 import Block from '../../framework/Block';
-import { Aside } from '../../components/aside/Aside';
 import { Heading } from '../../components/heading/Heading';
 import { Link } from '../../components/link/Link';
 export class NotFoundPage extends Block {
     constructor() {
         super({
-            Aside: new Aside(),
             HeadingH2: new Heading({
                 type: 'h2',
                 text: '404',
@@ -17,7 +15,6 @@ export class NotFoundPage extends Block {
             }),
             Link: new Link({
                 href: '/',
-                datapage: 'loginPage',
                 text: 'Вернуться на главную',
                 class: 'page-link',
                 onClick: () => {
@@ -26,7 +23,7 @@ export class NotFoundPage extends Block {
         });
     }
     override render() {
-        return `<div id="app">
+        return `<div id="page-wrapper">
             <main class="error-page">
                 {{{ HeadingH2 }}}
                 {{{ HeadingH3 }}}
@@ -34,7 +31,6 @@ export class NotFoundPage extends Block {
                     {{{ Link }}}
                 </p>
             </main>
-            {{{ Aside }}}
         </div>`;
     }
 }

@@ -1,54 +1,34 @@
-export type Listener = (...args: any[]) => void;
-type ListenersMap = { [event: string]: Listener[] };
+export type Listener<T extends unknown[] = any[]> = (...args: T) => void;
 
-export default class EventBus {
-    private listeners: ListenersMap;
+export default class EventBus<
+    Event extends string = string,
+    M extends { [K in Event]: unknown[] } = Record<Event, any[]>
+    > {
+    private listeners: { [key in Event]?: Listener<M[Event]>[] } = {};
 
-    constructor() {
-        this.listeners = {};
-    }
-    
-    /**
-     * Registers a callback function to an event.
-     *
-     * @param {string} event - The event name.
-     * @param {Listener} callback - The callback function.
-     */
-    on(event: string, callback: Listener): void {
+    on(event: Event, callback: Listener<M[Event]>) {
         if (!this.listeners[event]) {
-            this.listeners[event] = [];
+        this.listeners[event] = [];
         }
-        this.listeners[event].push(callback);
+
+        this.listeners[event]?.push(callback);
     }
 
-    /**
-     * Removes a callback function from an event.
-     *
-     * @param {string} event - The event name.
-     * @param {Listener} callback - The callback function.
-     * @throws Will throw an error if the event does not exist.
-     */
-    off(event: string, callback: Listener): void {
+    off(event: Event, callback: Listener<M[Event]>) {
         if (!this.listeners[event]) {
-            throw new Error(`Нет события: ${event}`);
+        throw new Error(`Нет события: ${event}`);
         }
-        this.listeners[event] = this.listeners[event].filter(
-            listener => listener !== callback
+        this.listeners[event] = this.listeners[event]?.filter(
+        (listener) => listener !== callback
         );
     }
 
-    /**
-     * Emits an event, calling all registered callback functions with the provided arguments.
-     *
-     * @param {string} event - The event name.
-     * @param {...any} args - Arguments to pass to the callback functions.
-     * @throws Will throw an error if the event does not exist.
-     */
-    emit(event: string, ...args: any[]): void {
+    emit(event: Event, ...args: M[Event]) {
         if (!this.listeners[event]) {
-            throw new Error(`Нет события: ${event}`);
+            return;
         }
-        this.listeners[event].forEach(listener => {
+
+        this.listeners[event]?.forEach(function (listener) {
             listener(...args);
         });
     }

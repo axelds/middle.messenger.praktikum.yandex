@@ -1,0 +1,38 @@
+.modal {
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    bordet-top: 1px solid var(--borderColor);
+    background: var(--primary);
+    color: #fff;
+    padding: 30px;
+    text-align: center;
+    font-size: 20px;
+    z-index: 1000;
+
+    a {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        svg {
+
+            path {
+                fill: #fff;
+            }
+        }
+    }
+
+    &.hide {
+        display: none;
+    }
+
+    &.show {
+        display: block;
+    }
+}

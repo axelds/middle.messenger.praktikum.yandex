@@ -1,12 +1,10 @@
 import '/src/styles/components/auth.pcss';
 import Block from '../../framework/Block';
 import { Registration } from '../../components/registration/Registration';
-import { Aside } from '../../components/aside/Aside';
 import { Heading } from '../../components/heading/Heading';
 export class RegisterPage extends Block {
 	constructor() {
 		super({
-			Aside: new Aside(),
             Registration: new Registration({
                 id: 'registration',
             }),
@@ -17,12 +15,11 @@ export class RegisterPage extends Block {
 		});
 	}
 	override render() {
-		return `<div id="app">
+		return `<div id="page">
             <main class="form-box">
                 {{{ Heading }}}
                 {{{ Registration }}}
             </main>
-            {{{ Aside }}}
 		</div>`;
 	}
 }

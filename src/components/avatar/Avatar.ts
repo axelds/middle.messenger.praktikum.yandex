@@ -4,15 +4,9 @@ export class Avatar extends Block {
     constructor(props: {
         src: string;
         name: string;
-        onClick: (event: Event) => void;
     }) {
         super({
         ...props,
-        events: {
-            click: (event: Event): void => {
-            props.onClick(event);
-            },
-        },
         });
     }
 
