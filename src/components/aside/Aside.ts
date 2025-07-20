@@ -13,7 +13,7 @@ export class Aside extends Block {
             },
         }),
         LinkRegister: new Link({
-            href: '/registration/',
+            href: '/sign-up',
             datapage: 'registerPage',
             text: 'Регистрация',
             class: 'page-link',

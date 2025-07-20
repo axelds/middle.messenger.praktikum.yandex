@@ -13,7 +13,7 @@ export class Input extends Block {
         ...props,
         events: {
             blur: (event: Event): void => {
-            props.onBlur(event);
+                props.onBlur(event);
             },
         },
         attr: {

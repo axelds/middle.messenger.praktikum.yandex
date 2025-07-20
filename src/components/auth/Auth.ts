@@ -1,9 +1,14 @@
 import Block from '../../framework/Block';
+import ShowRouter from '../../framework/ShowRouter';
+import { AuthAPI } from '../../api/auth-api';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Link } from '../../components/link/Link';
+import { Modal } from '../../components/modal/Modal';
 import FormValidator from '../../framework/FormValidator';
-import HttpTransport from '../../framework/HTTPTransport';
+
+const router = new ShowRouter();
+
 export class Auth extends Block {
     private formValidator: FormValidator;
     constructor(props: { id: string }) {
@@ -33,15 +38,35 @@ export class Auth extends Block {
                 class: 'btn',
                 onClick: (event: Event) => {
                     event.preventDefault();
-                    event.stopPropagation(); // отменяем действия по умолчанию. Будет работать после интеграции с backend
+                    event.stopPropagation();
                     this.formValidator.validateForm(event as SubmitEvent, this.element as HTMLFormElement);
-                    const httpTransport = new HttpTransport();
-                    httpTransport.get('/api/auth/'); // TODO: переделаю на нормальный запрос в следующих спринтах
-                    const formData = new FormData(this.element as HTMLFormElement);
-                    console.log({
-                        login: formData.get('login'),
-                        password: formData.get('password'),
-                    });
+                    if(this.formValidator.isValid) {
+                        const formData = new FormData(this.element as HTMLFormElement);
+                        const auth = new AuthAPI();
+                        auth.signin({
+                            login: formData.get('login')  as string,
+                            password: formData.get('password')  as string,
+                        }).then(() => {
+                            localStorage.setItem('isAuth', 'true');
+                            router.go('/messenger');
+                        }).catch(() => {
+                            this.children.Modal.setProps({
+                                text: 'Неправильный логин или пароль',
+                                class: 'show',
+                            });
+                        });
+                    }
+                },
+            }),
+            Modal: new Modal({
+                text: '',
+            }),
+            RegistrationLink: new Link({
+                href: '/sign-up',
+                text: 'Регистрация',
+                class: '',
+                onClick: (event: Event) => {
+                    console.log(event.target);
                 },
             }),
             PasswordLink: new Link({
@@ -67,8 +92,10 @@ export class Auth extends Block {
         </div>
         <div class="form-actions">
             {{{ Button }}}
+            {{{ RegistrationLink }}}
             {{{ PasswordLink }}}
         </div>
+        {{{ Modal }}}
         </form>`;
     }
 }

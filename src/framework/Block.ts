@@ -5,7 +5,7 @@ interface BlockProps {
     [key: string]: any;
 }
 
-export default abstract class Block {
+export default class Block {
     static EVENTS = {
         INIT: 'init',
         FLOW_CDM: 'flow:component-did-mount',
@@ -23,12 +23,16 @@ export default abstract class Block {
 
     protected lists: Record<string, any[]>;
 
+    protected state: any = {};
+
     protected eventBus: () => EventBus;
 
     constructor(propsWithChildren: BlockProps = {} as BlockProps) {
         const eventBus = new EventBus();
         const { props, children, lists } = this._getChildrenPropsAndProps(propsWithChildren);
+        this.getStateFromProps(props);
         this.props = this._makePropsProxy({ ...props });
+        this.state = this._makePropsProxy(this.state);
         this.children = children;
         this.lists = this._makePropsProxy({ ...lists });
         this.eventBus = () => eventBus;
@@ -57,6 +61,10 @@ export default abstract class Block {
         eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this) as Listener);
         eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this) as Listener);
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this) as Listener);
+    }
+
+    protected getStateFromProps(props: any): void {
+        this.state = {};
     }
 
     protected init(): void {
@@ -152,12 +160,12 @@ export default abstract class Block {
     private _render(): void {
         const propsAndStubs = { ...this.props };
         const tmpId =  Math.floor(100000 + Math.random() * 900000);
-        Object.entries(this.children).forEach(([key, child]) => {
-        propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+            Object.entries(this.children).forEach(([key, child]) => {
+            propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
         });
 
         Object.entries(this.lists).forEach(([key]) => {
-        propsAndStubs[key] = `<div data-id="__l_${tmpId}"></div>`;
+            propsAndStubs[key] = `<div data-id="__l_${tmpId}"></div>`;
         });
 
         const fragment = this._createDocumentElement('template');
@@ -195,6 +203,14 @@ export default abstract class Block {
         this._addEvents();
         this.addAttributes();
     }
+
+    setState = (nextState: any) => {
+        if (!nextState) {
+        return;
+        }
+
+        Object.assign(this.state, nextState);
+    };
 
     protected render(): string {
         return '';
@@ -244,5 +260,9 @@ export default abstract class Block {
         if (content) {
         content.style.display = 'none';
         }
+    }
+
+    public getId(): number {
+        return this._id;
     }
 }

@@ -7,8 +7,9 @@ enum METHODS {
 }
 
 type RequestOptions = {
-    method: METHODS;
+    method: string;
     data?: any;
+    headers?: Record<string, string>;
 }
 
 type HTTPMethod = <R=unknown>(url: string, options?: RequestOptions) => Promise<R>;
@@ -21,30 +22,41 @@ export default class HttpTransport {
     delete: HTTPMethod = (url, options) => this.request(url, { ...options, method: METHODS.DELETE });
 
     request<R>(url: string, options: RequestOptions = { method: METHODS.GET }): Promise<R> {
-        const { method, data } = options;
+        const { method, data, headers } = options;
 
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open(method, url);
 
-            xhr.onload = () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                const responseData = xhr.response;
-                resolve(responseData as R);
-            } else {
-                reject(xhr.statusText);
+            if (headers) {
+                Object.entries(headers).forEach(([key, value]) => {
+                    xhr.setRequestHeader(key, value);
+                });
             }
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const responseData = xhr.response;
+                    resolve(responseData as R);
+                } else {
+                    reject(xhr.statusText);
+                }
             };
+
+            xhr.withCredentials = true;
 
             xhr.onabort = reject;
             xhr.onerror = reject;
             xhr.ontimeout = reject;
 
             if (method === METHODS.GET || !data) {
-            xhr.send();
+                xhr.send();
+            } else if (method === METHODS.PUT && data instanceof FormData) {
+                xhr.send(data);
             } else {
-            xhr.send(data);
+                xhr.send(JSON.stringify(data));
             }
         });
     }
 }
+

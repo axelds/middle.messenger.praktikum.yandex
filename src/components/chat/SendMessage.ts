@@ -1,7 +1,9 @@
 import Block from '../../framework/Block';
+import Messages from '../../api/chat-ws-api';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import FormValidator from '../../framework/FormValidator';
+
 export class SendMessage extends Block {
     private formValidator: FormValidator;
 
@@ -23,12 +25,12 @@ export class SendMessage extends Block {
                 class: 'btn-send',
                 onClick: (event: Event) => {
                     event.preventDefault();
-                    event.stopPropagation(); // отменяем действия по умолчанию. Будет работать после интеграции с backend
+                    event.stopPropagation();
                     this.formValidator.validateForm(event as SubmitEvent, this.element as HTMLFormElement);
-                    const formData = new FormData(this.element as HTMLFormElement);
-                        console.log({
-                        message: formData.get('message'),
-                    });
+                    if(this.formValidator.isValid) {
+                        const formData = new FormData(this.element as HTMLFormElement);
+                        Messages.sendMessage(formData.get('message') as string);
+                    }
                 },
             })
         });
