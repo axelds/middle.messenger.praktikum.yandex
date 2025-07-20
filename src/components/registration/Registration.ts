@@ -110,6 +110,7 @@ export class Registration extends Block {
                             class: 'show',
                         });
                     } else {
+                        console.log('check');
                         const auth = new AuthAPI();
                         auth.signup({
                             email: formData.get('email') as string,
@@ -121,10 +122,9 @@ export class Registration extends Block {
                         }).then(() => {
                             localStorage.setItem('isAuth', 'true');
                             router.go('/messenger');
-                        }).catch((reason) => {
-                            console.log(reason);
+                        }).catch(() => {
                             this.children.Modal.setProps({
-                                text: Object.values(reason)[0],
+                                text: 'Ошибка регистрации',
                                 class: 'show',
                             });
                         });
