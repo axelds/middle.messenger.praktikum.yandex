@@ -1,8 +1,6 @@
 import Block from '../../framework/Block';
 import ShowRouter from '../../framework/ShowRouter';
-import Store from '../../framework/Store';
 import { AuthAPI } from '../../api/auth-api';
-import { ChatAPI } from '../../api/chat-api';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Link } from '../../components/link/Link';
@@ -12,7 +10,6 @@ import FormValidator from '../../framework/FormValidator';
 export class Auth extends Block {
     private formValidator: FormValidator;
     private router = new ShowRouter();
-    private chatAPI = new ChatAPI();
     private authAPI = new AuthAPI();
     constructor(props: { id: string }) {
         super({

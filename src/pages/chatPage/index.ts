@@ -17,11 +17,11 @@ import { AddAvatar } from '../../components/chat/AddAvatar';
 import { API_URLS } from '../../framework/Constants';
 import type { initState, SearchUserByLoginType } from '../../framework/Types';
 
-const authAPI = new AuthAPI();
-const chatAPI = new ChatAPI();
-const profileAPI = new ProfileAPI();
-
 export class ChatPage extends Block {
+    private authAPI = new AuthAPI();
+    private chatAPI = new ChatAPI();
+    private profileAPI = new ProfileAPI();
+
     constructor(...args: any) {
         super({
             ...args,
@@ -53,7 +53,7 @@ export class ChatPage extends Block {
                     event.preventDefault();
                     event.stopPropagation();
                     const formData = new FormData(event.target as HTMLFormElement);
-                    chatAPI.createChat({ title: formData.get('title') as string }).then((response) => {
+                    this.chatAPI.createChat({ title: formData.get('title') as string }).then((response) => {
                         this.children.Modal.setProps({
                             text: 'Чат создан',
                             class: 'show',
@@ -118,7 +118,7 @@ export class ChatPage extends Block {
                 onClick: (event: Event) => {
                     event.preventDefault();
                     event.stopPropagation();
-                    chatAPI.deleteChat({ chatId: this.props.currentChat }).then(() => {
+                    this.chatAPI.deleteChat({ chatId: this.props.currentChat }).then(() => {
                         this.children.Modal.setProps({
                             text: 'Чат удален',
                             class: 'show',
@@ -144,9 +144,9 @@ export class ChatPage extends Block {
                     event.preventDefault();
                     event.stopPropagation();
                     const formData = new FormData(event.target as HTMLFormElement);
-                    profileAPI.searchUserByLogin({ login: formData.get('login') as string } as SearchUserByLoginType).then((response) => {
+                    this.profileAPI.searchUserByLogin({ login: formData.get('login') as string } as SearchUserByLoginType).then((response) => {
                         const user = JSON.parse(response as string);
-                        chatAPI.addUserToChat({
+                        this.chatAPI.addUserToChat({
                             users: [user[0].id],
                             chatId: Number(this.props.currentChat),
                         }).then(() => {
@@ -172,9 +172,9 @@ export class ChatPage extends Block {
                     event.preventDefault();
                     event.stopPropagation();
                     const formData = new FormData(event.target as HTMLFormElement);
-                    profileAPI.searchUserByLogin({ login: formData.get('login') as string } as SearchUserByLoginType).then((response) => {
+                    this.profileAPI.searchUserByLogin({ login: formData.get('login') as string } as SearchUserByLoginType).then((response) => {
                         const user = JSON.parse(response as string);
-                        chatAPI.removeUserFromChat({
+                        this.chatAPI.removeUserFromChat({
                             users: [user[0].id],
                             chatId: Number(this.props.currentChat),
                         }).then(() => {
@@ -200,7 +200,7 @@ export class ChatPage extends Block {
                     event.stopPropagation();
                     const formData = new FormData(event.target as HTMLFormElement);
                     formData.append('chatId', String(this.props.currentChat));
-                    chatAPI.updateAvatar(formData).then((response) => {
+                    this.chatAPI.updateAvatar(formData).then((response) => {
                         this.children.Modal.setProps({
                             text: 'Аватар изменен',
                             class: 'show',
@@ -250,11 +250,11 @@ export class ChatPage extends Block {
     }
 
     public async getUserInfo() {
-        const response = await authAPI.profile();
+        const response = await this.authAPI.profile();
         Store.setState({ userInfo: JSON.parse(response as string) });
     }
     public async getChats() {
-        const response = await chatAPI.getChats();
+        const response = await this.chatAPI.getChats();
         Store.setState({ chats: JSON.parse(response as string) });
     }
 
@@ -262,7 +262,7 @@ export class ChatPage extends Block {
         Store.setState({ currentChat: id });
         this.children.ChatHeader.setProps({ title: this.props.chats.find((chat: any) => chat.id === id).title });
         this.children.ChatHeader.setProps({ src: this.props.chats.find((chat: any) => chat.id === id).avatar });
-        chatAPI.getChatToken({ chatId: Number(id) }).then((token) => {
+        this.chatAPI.getChatToken({ chatId: Number(id) }).then((token) => {
             Messages.connect({
                 userId: Store.getState()?.userInfo?.id,
                 chatId: Number(id),
