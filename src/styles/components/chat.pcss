@@ -3,7 +3,6 @@
     min-height: 100vh;
 
     aside {
-        height: 100%;
         width: 310px;
         min-width: 310px;
         margin-right: 20px;
@@ -25,16 +24,11 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        text-decoration: none;
+        text-decoration: none !important;
         gap: 10px;
         padding: 12px 0px;
-        text-decoration: none;
         color: var(--color);
         border-bottom: 1px solid var(--borderColor);
-
-        &:hover {
-            text-decoration: none;
-        }
     }
 
     .chat-avatar {
@@ -155,7 +149,7 @@
 
         &:last-child {
 
-            &:after {
+            &::after {
                 display: block;
                 content: '';
                 background: url('data:image/svg+xml,<svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9L5 5L1 1" stroke="%23999999"/></svg>') center center no-repeat;
@@ -228,7 +222,7 @@
             display: none;
         }
 
-        &:after {
+        &::after {
             display: block;
             content: 'Выберите чат чтобы отправить сообщение';
         }
@@ -282,7 +276,7 @@
             font-size: 14px;
             color: var(--color);
 
-            &:before {
+            &::before {
                 display: block;
                 content: '';
                 background: url('data:image/svg+xml,<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="10.25" stroke="%230891B2" stroke-width="1.5"/><line x1="10.9999" y1="5.5" x2="10.9999" y2="16.5" stroke="%230891B2" stroke-width="1.5"/><line x1="5.49988" y1="11" x2="16.4999" y2="11" stroke="%230891B2" stroke-width="1.5"/></svg>') center center no-repeat;
@@ -293,7 +287,7 @@
 
             &.remove-icon {
 
-                &:before {
+                &::before {
                     transform: rotate(45deg);
                 }
             }
@@ -350,22 +344,8 @@
         background: var(--messageBg);
         max-width: 450px;
         padding: 12px;
-        border-radius: 0px 20px 20px 20px;
+        border-radius: 0px 20px 20px;
 
-        &.me {
-            justify-content: flex-end;
-            background: var(--messageBgMe);
-            border-radius: 20px 0px 20px 20px;
-            margin-left: auto;
-
-            .message__meta {
-                color: var(--primary);
-
-                .message__status {
-                    display: block;
-                }
-            }
-        }
 
         .message__meta {
             display: flex;
@@ -388,6 +368,21 @@
                 }
             }
         }
+
+        &.me {
+            justify-content: flex-end;
+            background: var(--messageBgMe);
+            border-radius: 20px 0px 20px 20px;
+            margin-left: auto;
+
+            .message__meta {
+                color: var(--primary);
+
+                .message__status {
+                    display: block;
+                }
+            }
+        }
     }
 
 }
@@ -400,7 +395,7 @@
     color: var(--grayColor);
 }
 
-#searchChat {
+#search-chat {
     position: relative;
     background: var(--chatInputBackgroundColor);
     padding: 6px 10px 6px 20px;

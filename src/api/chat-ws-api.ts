@@ -28,10 +28,10 @@ class Messages {
 
     private _removeListeners() {
         if (this._wss) {
-        this._wss.removeEventListener('open', this._handleOpen);
-        this._wss.removeEventListener('close', this._handleClose);
-        this._wss.removeEventListener('message', this._handleMessage);
-        this._wss.removeEventListener('error', this._handleError);
+            this._wss.removeEventListener('open', this._handleOpen);
+            this._wss.removeEventListener('close', this._handleClose);
+            this._wss.removeEventListener('message', this._handleMessage);
+            this._wss.removeEventListener('error', this._handleError);
         }
     }
 
@@ -55,16 +55,16 @@ class Messages {
         const messages = JSON.parse(evt.data);
 
         if (messages.type !== 'pong') {
-        if (Array.isArray(messages)) {
-            Store.setState({
-            messages: messages.reverse(),
-            });
-        } else {
-            const state = Store.getState() as initState;
-            Store.setState({
-                messages: Object.assign(state.messages, { [state.messages.length]: messages }),
-            });
-        }
+            if (Array.isArray(messages)) {
+                Store.setState({
+                    messages: messages.reverse(),
+                });
+            } else {
+                const state = Store.getState() as initState;
+                Store.setState({
+                    messages: Object.assign(state.messages, { [state.messages.length]: messages }),
+                });
+            }
         }
     }
 
@@ -82,25 +82,25 @@ class Messages {
 
     public connect({ userId, chatId, token }: any) {
         if (this._chatId !== chatId) {
-        this._leave();
-        this._userId = userId;
-        this._chatId = chatId;
-        this._token = token;
-        this._wss = new WebSocket(
-            `${API_URLS.WSS_URL}/${this._userId}/${this._chatId}/${this._token}`
-        );
-        this._setListeners();
+            this._leave();
+            this._userId = userId;
+            this._chatId = chatId;
+            this._token = token;
+            this._wss = new WebSocket(
+                `${API_URLS.WSS_URL}/${this._userId}/${this._chatId}/${this._token}`
+            );
+            this._setListeners();
         }
     }
 
     public getMessages() {
         if (this._wss) {
-        this._wss.send(
-            JSON.stringify({
-            content: '0',
-            type: 'get old',
-            })
-        );
+            this._wss.send(
+                JSON.stringify({
+                content: '0',
+                type: 'get old',
+                })
+            );
         }
     }
 

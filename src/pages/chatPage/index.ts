@@ -1,7 +1,6 @@
 import '/src/styles/components/chat.pcss';
 import Block from '../../framework/Block';
 import { SendMessage } from '../../components/chat/SendMessage';
-import ShowRouter from '../../framework/ShowRouter';
 import { AuthAPI } from '../../api/auth-api';
 import { ChatAPI } from '../../api/chat-api';
 import { ProfileAPI } from '../../api/profile-api';
@@ -17,9 +16,7 @@ import { SearchChat } from '../../components/chat/SearchChat';
 import { AddAvatar } from '../../components/chat/AddAvatar';
 import { API_URLS } from '../../framework/Constants';
 import type { initState, SearchUserByLoginType } from '../../framework/Types';
-import { checkAuth } from '../../helpers/checkAuth';
 
-const router = new ShowRouter();
 const authAPI = new AuthAPI();
 const chatAPI = new ChatAPI();
 const profileAPI = new ProfileAPI();
@@ -220,7 +217,7 @@ export class ChatPage extends Block {
                 }
             }),
             SearchChat: new SearchChat({
-                id: 'searchChat',
+                id: 'search-chat',
                 onSubmit: (event: Event) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -232,9 +229,11 @@ export class ChatPage extends Block {
                 }
             })
         });
-        this.getChats();
-        this.getUserInfo();
-        Messages.getMessages();
+        if(localStorage.getItem('isAuth') === 'true') {
+            this.getChats();
+            this.getUserInfo();
+            Messages.getMessages();
+        }
         this.setProps({
             events: {
                 click: (event: Event) => {
@@ -257,12 +256,6 @@ export class ChatPage extends Block {
     public async getChats() {
         const response = await chatAPI.getChats();
         Store.setState({ chats: JSON.parse(response as string) });
-    }
-
-    public async getChatUsers({ ...rest }: { id: string }) { // удалить
-        return chatAPI.getChatUsers({ ...rest }).then(({ response }: any) => {
-            Store.setState({ usersFromChats: response });
-        }).catch();
     }
 
     public selectChat(id: Number) {

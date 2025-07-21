@@ -21,11 +21,12 @@ export default class ShowRouter {
     }
 
     start() {
-        window.onpopstate = () => {
-            this._onRoute(window.location.pathname);
+        window.onpopstate = (event) => {
+            this._onRoute((event.currentTarget as Window).location.pathname);
         };
         this._onRoute(window.location.pathname);
     }
+
 
     _onRoute(pathname: string) {
         if ((pathname === '/messenger' || pathname === '/settings') && !localStorage.getItem('isAuth')) {
@@ -37,7 +38,7 @@ export default class ShowRouter {
             this.go('/404');
             return;
         }
-        if (this.currentRoute) {
+        if (this.currentRoute && this.currentRoute !== route) {
             this.currentRoute.leave();
         }
         this.currentRoute = route;

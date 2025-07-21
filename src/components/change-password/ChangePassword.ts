@@ -1,13 +1,10 @@
 import Block from '../../framework/Block';
-import ShowRouter from '../../framework/ShowRouter';
 import { ProfileAPI } from '../../api/profile-api';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Label } from '../../components/label/Label';
 import { Modal } from '../../components/modal/Modal';
 import FormValidator from '../../framework/FormValidator';
-
-const router = new ShowRouter();
 
 export class ChangePassword extends Block {
     private formValidator: FormValidator;

@@ -30,7 +30,7 @@ export default class Block {
     constructor(propsWithChildren: BlockProps = {} as BlockProps) {
         const eventBus = new EventBus();
         const { props, children, lists } = this._getChildrenPropsAndProps(propsWithChildren);
-        this.getStateFromProps(props);
+        this.getStateFromProps();
         this.props = this._makePropsProxy({ ...props });
         this.state = this._makePropsProxy(this.state);
         this.children = children;
@@ -63,7 +63,7 @@ export default class Block {
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this) as Listener);
     }
 
-    protected getStateFromProps(props: any): void {
+    protected getStateFromProps(): void {
         this.state = {};
     }
 

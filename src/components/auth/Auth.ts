@@ -1,16 +1,19 @@
 import Block from '../../framework/Block';
 import ShowRouter from '../../framework/ShowRouter';
+import Store from '../../framework/Store';
 import { AuthAPI } from '../../api/auth-api';
+import { ChatAPI } from '../../api/chat-api';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Link } from '../../components/link/Link';
 import { Modal } from '../../components/modal/Modal';
 import FormValidator from '../../framework/FormValidator';
 
-const router = new ShowRouter();
-
 export class Auth extends Block {
     private formValidator: FormValidator;
+    private router = new ShowRouter();
+    private chatAPI = new ChatAPI();
+    private authAPI = new AuthAPI();
     constructor(props: { id: string }) {
         super({
             ...props,
@@ -42,16 +45,22 @@ export class Auth extends Block {
                     this.formValidator.validateForm(event as SubmitEvent, this.element as HTMLFormElement);
                     if(this.formValidator.isValid) {
                         const formData = new FormData(this.element as HTMLFormElement);
-                        const auth = new AuthAPI();
-                        auth.signin({
-                            login: formData.get('login')  as string,
-                            password: formData.get('password')  as string,
+                        this.authAPI.signin({
+                            login: formData.get('login') as string,
+                            password: formData.get('password') as string,
                         }).then(() => {
                             localStorage.setItem('isAuth', 'true');
-                            router.go('/messenger');
-                        }).catch(() => {
+                            this.router.go('/messenger');
+                            window.location.reload();
+                        }).catch((error) => {
+                            const errorMsg = JSON.parse(error as string).reason;
+                            if(errorMsg === 'User already in system') {
+                                localStorage.setItem('isAuth', 'true');
+                                this.router.go('/messenger');
+                                window.location.reload();
+                            };
                             this.children.Modal.setProps({
-                                text: 'Неправильный логин или пароль',
+                                text: errorMsg,
                                 class: 'show',
                             });
                         });
@@ -71,7 +80,6 @@ export class Auth extends Block {
             }),
             PasswordLink: new Link({
                 href: '',
-                datapage: 'lostPassword',
                 text: 'Забыли пароль?',
                 class: '',
                 onClick: (event: Event) => {
