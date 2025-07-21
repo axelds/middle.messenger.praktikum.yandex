@@ -35,11 +35,10 @@ export default class HttpTransport {
             }
 
             xhr.onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    const responseData = xhr.response;
-                    resolve(responseData as R);
+                if (xhr.status < 400) {
+                    resolve(xhr.response);
                 } else {
-                    reject(xhr.statusText);
+                    reject(xhr.response);
                 }
             };
 

@@ -2,6 +2,7 @@ import Block from '../../framework/Block';
 import ShowRouter from '../../framework/ShowRouter';
 import { AuthAPI } from '../../api/auth-api';
 import { ProfileAPI } from '../../api/profile-api';
+import Store from '../../framework/Store';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Avatar } from '../../components/avatar/Avatar';
@@ -11,11 +12,10 @@ import { Modal } from '../../components/modal/Modal';
 import FormValidator from '../../framework/FormValidator';
 import { API_URLS } from '../../framework/Constants';
 
-const router = new ShowRouter();
-
 export class Profile extends Block {
     private formValidator: FormValidator;
-
+    private router = new ShowRouter();
+    
     constructor(props: { id: string }) {
         super({
             ...props,
@@ -167,10 +167,10 @@ export class Profile extends Block {
                 onClick: (event: Event) => {
                     event.preventDefault();
                     event.stopPropagation();
+                    localStorage.removeItem('isAuth');
                     const auth = new AuthAPI();
                     auth.logout().then(() => {
-                        localStorage.removeItem('isAuth');
-                        router.go('/');
+                        this.router.go('/');
                     });
                 },
             }),
@@ -181,12 +181,15 @@ export class Profile extends Block {
         });
 
         this.formValidator = new FormValidator();
-        this.fillProfileData();
+        if(localStorage.getItem('isAuth') === 'true') {
+            this.fillProfileData();
+        }
     }
 
     private fillProfileData(): void {
         const auth = new AuthAPI();
         auth.profile().then((profile) => {
+            Store.setState({ userInfo: JSON.parse(profile as string) });
             const profileData = JSON.parse(profile as string) as { first_name: string, second_name: string, email: string, login: string, display_name: string, phone: string, avatar: string  };
             this.children.InputFirstName.setProps({ value: profileData.first_name });
             this.children.InputSecondName.setProps({ value: profileData.second_name });

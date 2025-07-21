@@ -7,11 +7,9 @@ import { Link } from '../../components/link/Link';
 import { Modal } from '../../components/modal/Modal';
 import FormValidator from '../../framework/FormValidator';
 
-const router = new ShowRouter();
-
 export class Registration extends Block {
   private formValidator: FormValidator;
-
+  private router = new ShowRouter()
   constructor(props: {
     id: string
   }) {
@@ -121,10 +119,15 @@ export class Registration extends Block {
                             password: formData.get('password') as string,
                         }).then(() => {
                             localStorage.setItem('isAuth', 'true');
-                            router.go('/messenger');
-                        }).catch(() => {
+                            this.router.go('/messenger');
+                        }).catch((error) => {
+                            const errorMsg = JSON.parse(error as string).reason;
+                            if(errorMsg === 'User already in system') {
+                                localStorage.setItem('isAuth', 'true');
+                                this.router.go('/messenger');
+                            };
                             this.children.Modal.setProps({
-                                text: 'Ошибка регистрации',
+                                text: errorMsg,
                                 class: 'show',
                             });
                         });

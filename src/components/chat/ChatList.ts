@@ -2,14 +2,13 @@ import Block from '../../framework/Block';
 import { ChatAPI } from '../../api/chat-api';
 import Store from '../../framework/Store';
 
-const api = new ChatAPI();
-
 export class ChatList extends Block {
+    private api = new ChatAPI();
     constructor() {
         super({
             content: '',
         });
-        api.getChats().then((value) => {
+        this.api.getChats().then((value) => {
             const chats = JSON.parse(value as string);
             const state = Store.getState();
             (state as any).chats = chats;

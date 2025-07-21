@@ -229,9 +229,11 @@ export class ChatPage extends Block {
                 }
             })
         });
-        this.getChats();
-        this.getUserInfo();
-        Messages.getMessages();
+        if(localStorage.getItem('isAuth') === 'true') {
+            this.getChats();
+            this.getUserInfo();
+            Messages.getMessages();
+        }
         this.setProps({
             events: {
                 click: (event: Event) => {
@@ -254,12 +256,6 @@ export class ChatPage extends Block {
     public async getChats() {
         const response = await chatAPI.getChats();
         Store.setState({ chats: JSON.parse(response as string) });
-    }
-
-    public async getChatUsers({ ...rest }: { id: string }) { // удалить
-        return chatAPI.getChatUsers({ ...rest }).then(({ response }: any) => {
-            Store.setState({ usersFromChats: response });
-        }).catch();
     }
 
     public selectChat(id: Number) {
