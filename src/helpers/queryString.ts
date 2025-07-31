@@ -38,4 +38,4 @@ function queryStringify(data: StringIndexed): string | never {
     }, "");
 }
 
-export default queryStringify
+export default queryStringify;

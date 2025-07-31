@@ -21,6 +21,11 @@
     "lint:style": "stylelint \"**/*.pcss\"",
     "lint:style:fix": "stylelint \"**/*.pcss\" --fix"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.27.7",
     "@babel/eslint-parser": "^7.27.5",
