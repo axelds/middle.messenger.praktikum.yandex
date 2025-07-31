@@ -1,12 +1,21 @@
 import Block from '../../framework/Block';
+import ShowRouter from '../../framework/ShowRouter';
+import { AuthAPI } from '../../api/auth-api';
+import { ProfileAPI } from '../../api/profile-api';
+import Store from '../../framework/Store';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Avatar } from '../../components/avatar/Avatar';
 import { Label } from '../../components/label/Label';
+import { Link } from '../../components/link/Link';
+import { Modal } from '../../components/modal/Modal';
 import FormValidator from '../../framework/FormValidator';
+import { API_URLS } from '../../framework/Constants';
+
 export class Profile extends Block {
     private formValidator: FormValidator;
-
+    private router = new ShowRouter();
+    
     constructor(props: { id: string }) {
         super({
             ...props,
@@ -30,7 +39,6 @@ export class Profile extends Block {
                 name: 'first_name',
                 type: 'text',
                 placeholder: 'Имя',
-                value: 'Иван',
                 onBlur: (event: Event) => {
                     this.formValidator.validateInput(event.target as HTMLInputElement);
                 },
@@ -43,7 +51,6 @@ export class Profile extends Block {
                 name: 'second_name',
                 type: 'text',
                 placeholder: 'Фамилия',
-                value: 'Иванов',
                 onBlur: (event: Event) => {
                     this.formValidator.validateInput(event.target as HTMLInputElement);
                 },
@@ -56,7 +63,6 @@ export class Profile extends Block {
                 name: 'email',
                 type: 'mail',
                 placeholder: 'E-mail',
-                value: 'pochta@yandex.ru',
                 onBlur: (event: Event) => {
                     this.formValidator.validateInput(event.target as HTMLInputElement);
                 },
@@ -69,12 +75,11 @@ export class Profile extends Block {
                 name: 'login',
                 type: 'text',
                 placeholder: 'Логин',
-                value: 'axelds',
                 onBlur: (event: Event) => {
                     this.formValidator.validateInput(event.target as HTMLInputElement);
                 },
             }),
-            LabelChatNickname: new Label ({
+            LabelChatNickname: new Label({
                 text: 'Имя в чате',
             }),
             InputChatNickname: new Input({
@@ -82,7 +87,6 @@ export class Profile extends Block {
                 name: 'chat_nickname',
                 type: 'text',
                 placeholder: 'Имя в чате',
-                value: 'Ivan Petrov',
                 onBlur: (event: Event) => {
                     this.formValidator.validateInput(event.target as HTMLInputElement);
                 },
@@ -95,31 +99,6 @@ export class Profile extends Block {
                 name: 'phone',
                 type: 'tel',
                 placeholder: 'Номер телефона',
-                value: '+79999999999',
-                onBlur: (event: Event) => {
-                    this.formValidator.validateInput(event.target as HTMLInputElement);
-                },
-            }),
-            LabelPassword: new Label({
-                text: 'Старый пароль',
-            }),
-            InputPassword: new Input({
-                id: 'password',
-                name: 'password',
-                type: 'password',
-                placeholder: 'Пароль',
-                onBlur: (event: Event) => {
-                    this.formValidator.validateInput(event.target as HTMLInputElement);
-                },
-            }),
-            LabelPasswordRepeat: new Label({
-                text: 'Новый пароль',
-            }),
-            InputPasswordRepeat: new Input({
-                id: 'password_repeat',
-                name: 'password_repeat',
-                type: 'password',
-                placeholder: 'Новый пароль',
                 onBlur: (event: Event) => {
                     this.formValidator.validateInput(event.target as HTMLInputElement);
                 },
@@ -130,22 +109,100 @@ export class Profile extends Block {
                 class: 'btn',
                 onClick: (event: Event) => {
                     event.preventDefault();
-                    event.stopPropagation(); // отменяем действия по умолчанию. Будет работать после интеграции с backend
+                    event.stopPropagation();
                     this.formValidator.validateForm(event as SubmitEvent, this.element as HTMLFormElement);
-                    const formData = new FormData(this.element as HTMLFormElement);
-                    console.log({
-                        email: formData.get('email'),
-                        login: formData.get('login'),
-                        first_name: formData.get('first_name'),
-                        second_name: formData.get('second_name'),
-                        phone: formData.get('phone'),
-                        password: formData.get('password'),
-                        password_repeat: formData.get('password_repeat'),
+                    if(this.formValidator.isValid) {
+                        const formData = new FormData(this.element as HTMLFormElement);
+                        const userInfo = new ProfileAPI();
+                        userInfo.updateProfile({
+                            first_name: formData.get('first_name') as string,
+                            second_name: formData.get('second_name') as string,
+                            display_name: formData.get('chat_nickname') as string,
+                            login: formData.get('login') as string,
+                            email: formData.get('email') as string,
+                            phone: formData.get('phone') as string,
+                        }).then(() => {
+                            this.fillProfileData();
+                            this.children.Modal.setProps({
+                                text: 'Профиль успешно обновлен',
+                                class: 'show',
+                            });
+                        }).catch(() => {
+                            this.children.Modal.setProps({
+                                text: 'Ошибка обновления профиля',
+                                class: 'show',
+                            });
+                        });
+                        if(formData.get('avatar') !== null) {
+                            const avatarFormData = new FormData();
+                            avatarFormData.append('avatar', formData.get('avatar') as File);
+                            console.log(avatarFormData);
+                            userInfo.updateAvatar(avatarFormData).then(() => {
+                                this.fillProfileData();
+                                this.children.Modal.setProps({
+                                    text: 'Аватар успешно обновлен',
+                                    class: 'show',
+                                });
+                            }).catch(() => {
+                                this.children.Modal.setProps({
+                                    text: 'Ошибка обновления аватара',
+                                    class: 'show',
+                                });
+                            });
+                        }
+                    }
+                },
+            }),
+            PasswordLink: new Link({
+                text: 'Изменить пароль',
+                class: 'password-link',
+                href: '/password',
+                onClick: () => {
+                    
+                }
+            }),
+            Logout: new Link({
+                text: 'Выход',
+                class: 'logout-link',
+                onClick: (event: Event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    localStorage.removeItem('isAuth');
+                    const auth = new AuthAPI();
+                    auth.logout().then(() => {
+                        this.router.go('/');
                     });
                 },
             }),
+            Modal: new Modal({
+                text: '',
+                class: 'hide',
+            }),
         });
+
         this.formValidator = new FormValidator();
+        if(localStorage.getItem('isAuth') === 'true') {
+            this.fillProfileData();
+        }
+    }
+
+    private fillProfileData(): void {
+        const auth = new AuthAPI();
+        auth.profile().then((profile) => {
+            Store.setState({ userInfo: JSON.parse(profile as string) });
+            const profileData = JSON.parse(profile as string) as { first_name: string, second_name: string, email: string, login: string, display_name: string, phone: string, avatar: string  };
+            this.children.InputFirstName.setProps({ value: profileData.first_name });
+            this.children.InputSecondName.setProps({ value: profileData.second_name });
+            this.children.InputEmail.setProps({ value: profileData.email });
+            this.children.InputLogin.setProps({ value: profileData.login });
+            this.children.InputChatNickname.setProps({ value: profileData.display_name });
+            this.children.InputPhone.setProps({ value: profileData.phone });
+            if(profileData.avatar !== null) {
+                this.children.Avatar.setProps({ src: API_URLS.RESOURCES_URL + profileData.avatar });
+            }
+        }).catch((error) => {
+            console.error("Failed to fetch profile data", error);
+        });
     }
 
     override render() {
@@ -178,17 +235,12 @@ export class Profile extends Block {
                 {{{ LabelPhone }}}
                 {{{ InputPhone }}}
             </div>
-            <div class="form-item">
-                {{{ LabelPassword }}}
-                {{{ InputPassword }}}
-            </div>
-            <div class="form-item">
-                {{{ LabelPasswordRepeat }}}
-                {{{ InputPasswordRepeat }}}
-            </div>
             <div class="form-actions">
                 {{{ Button }}}
+                {{{ PasswordLink }}}
+                {{{ Logout }}}
             </div>
+            {{{ Modal }}}
         </form>`;
     }
 }

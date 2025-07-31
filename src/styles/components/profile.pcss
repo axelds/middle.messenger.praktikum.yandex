@@ -39,7 +39,24 @@
         }
     }
 
+    .form-avatar {
+
+        img {
+            border-radius: 50%;
+            width: 130px;
+            height: 130px; 
+            object-fit: cover;
+        }
+    }
+
     .form-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
         margin-top: 50px;
+
+        .logout-link {
+            color: var(--errorColor);
+        }
     }
 }

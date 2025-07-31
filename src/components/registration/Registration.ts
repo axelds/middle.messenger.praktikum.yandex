@@ -1,11 +1,15 @@
 import Block from '../../framework/Block';
+import { AuthAPI } from '../../api/auth-api';
+import ShowRouter from '../../framework/ShowRouter';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Link } from '../../components/link/Link';
+import { Modal } from '../../components/modal/Modal';
 import FormValidator from '../../framework/FormValidator';
+
 export class Registration extends Block {
   private formValidator: FormValidator;
-
+  private router = new ShowRouter()
   constructor(props: {
     id: string
   }) {
@@ -62,7 +66,14 @@ export class Registration extends Block {
             type: 'password',
             placeholder: 'Пароль',
             onBlur: (event: Event) => {
-                this.formValidator.validateInput(event.target as HTMLInputElement);
+                const input = event.target as HTMLInputElement;
+                this.formValidator.validateInput(input);
+                const passwordRepeatInput = document.querySelector('input[name="password_repeat"]') as HTMLInputElement;
+                if (passwordRepeatInput && input.value !== passwordRepeatInput.value) {
+                    passwordRepeatInput.classList.add('invalid');
+                } else {
+                    passwordRepeatInput.classList.remove('invalid');
+                }
             },
         }),
         InputPasswordRepeat: new Input({
@@ -71,7 +82,14 @@ export class Registration extends Block {
             type: 'password',
             placeholder: 'Пароль ещё раз',
             onBlur: (event: Event) => {
-                this.formValidator.validateInput(event.target as HTMLInputElement);
+                const input = event.target as HTMLInputElement;
+                this.formValidator.validateInput(input);
+                const passwordInput = document.querySelector('input[name="password"]') as HTMLInputElement;
+                if (passwordInput && input.value !== passwordInput.value) {
+                    input.classList.add('invalid');
+                } else {
+                    input.classList.remove('invalid');
+                }
             },
         }),
         Button: new Button({
@@ -80,18 +98,41 @@ export class Registration extends Block {
             class: 'btn',
             onClick: (event: Event) => {
                 event.preventDefault();
-                event.stopPropagation(); // отменяем действия по умолчанию. Будет работать после интеграции с backend
+                event.stopPropagation();
                 this.formValidator.validateForm(event as SubmitEvent, this.element as HTMLFormElement);
-                const formData = new FormData(this.element as HTMLFormElement);
-                console.log({
-                    email: formData.get('email'),
-                    login: formData.get('login'),
-                    first_name: formData.get('first_name'),
-                    second_name: formData.get('second_name'),
-                    phone: formData.get('phone'),
-                    password: formData.get('password'),
-                    password_repeat: formData.get('password_repeat'),
-                });
+                if(this.formValidator.isValid) {
+                    const formData = new FormData(this.element as HTMLFormElement);
+                    if (formData.get('password') !== formData.get('password_repeat')) {
+                        this.children.Modal.setProps({
+                            text: 'Пароли не совпадают',
+                            class: 'show',
+                        });
+                    } else {
+                        console.log('check');
+                        const auth = new AuthAPI();
+                        auth.signup({
+                            email: formData.get('email') as string,
+                            login: formData.get('login') as string,
+                            first_name: formData.get('first_name') as string,
+                            second_name: formData.get('second_name') as string,
+                            phone: formData.get('phone') as string,
+                            password: formData.get('password') as string,
+                        }).then(() => {
+                            localStorage.setItem('isAuth', 'true');
+                            this.router.go('/messenger');
+                        }).catch((error) => {
+                            const errorMsg = JSON.parse(error as string).reason;
+                            if(errorMsg === 'User already in system') {
+                                localStorage.setItem('isAuth', 'true');
+                                this.router.go('/messenger');
+                            };
+                            this.children.Modal.setProps({
+                                text: errorMsg,
+                                class: 'show',
+                            });
+                        });
+                    }
+                }
             },
         }),
         PasswordLink: new Link({
@@ -102,7 +143,10 @@ export class Registration extends Block {
             onClick: (event: Event) => {
                 console.log(event.target);
             },
-        })
+        }),
+        Modal: new Modal({
+            text: '',
+        }),
     });
     this.formValidator = new FormValidator();
   }
@@ -134,6 +178,7 @@ export class Registration extends Block {
         {{{ Button }}}
         {{{ PasswordLink }}}
       </div>
+      {{{ Modal }}}
     </form>`;
   }
 }

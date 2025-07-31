@@ -1,25 +1,24 @@
-import { getCurrentPage } from './routes';
-import Block from './framework/Block';
+import ShowRouter from './framework/ShowRouter';
+import { LoginPage } from './pages/loginPage';
+import { RegisterPage } from './pages/registrationPage';
+import { ChatPage } from './pages/chatPage';
+import { ProfilePage } from './pages/profilePage';
+import { PasswordPage } from './pages/passwordPage';
+import { NotFoundPage } from './pages/notfoundPage';
+import { checkAuth } from './helpers/checkAuth';
+import './styles/main.pcss'; 
 
-interface AppState {
-    currentPage: Block;
-}
+const router = new ShowRouter();
 
-export default class App {
-    private state: AppState;
-    private appContainer: HTMLElement | null;
+checkAuth();
 
-    constructor() {
-        this.state = {
-            currentPage: getCurrentPage(),
-        };
-        this.appContainer = document.getElementById('app');
-    }
-
-    render(): void {
-        if (this.appContainer && this.state.currentPage) {
-            this.appContainer.replaceWith(this.state.currentPage.getContent());
-        }
-    }
-}
-
+document.addEventListener('DOMContentLoaded', () => {
+    router
+        .use('/', new LoginPage()) 
+        .use('/sign-up', new RegisterPage())
+        .use('/messenger', new ChatPage())
+        .use('/settings', new ProfilePage())
+        .use('/password', new PasswordPage())
+        .use('/404', new NotFoundPage())
+        .start();
+});

@@ -1,11 +1,16 @@
 import Block from '../../framework/Block';
+import ShowRouter from '../../framework/ShowRouter';
+import { AuthAPI } from '../../api/auth-api';
 import { Input } from '../input/Input';
 import { Button } from '../../components/button/Button';
 import { Link } from '../../components/link/Link';
+import { Modal } from '../../components/modal/Modal';
 import FormValidator from '../../framework/FormValidator';
-import HttpTransport from '../../framework/HTTPTransport';
+
 export class Auth extends Block {
     private formValidator: FormValidator;
+    private router = new ShowRouter();
+    private authAPI = new AuthAPI();
     constructor(props: { id: string }) {
         super({
             ...props,
@@ -33,20 +38,45 @@ export class Auth extends Block {
                 class: 'btn',
                 onClick: (event: Event) => {
                     event.preventDefault();
-                    event.stopPropagation(); // отменяем действия по умолчанию. Будет работать после интеграции с backend
+                    event.stopPropagation();
                     this.formValidator.validateForm(event as SubmitEvent, this.element as HTMLFormElement);
-                    const httpTransport = new HttpTransport();
-                    httpTransport.get('/api/auth/'); // TODO: переделаю на нормальный запрос в следующих спринтах
-                    const formData = new FormData(this.element as HTMLFormElement);
-                    console.log({
-                        login: formData.get('login'),
-                        password: formData.get('password'),
-                    });
+                    if(this.formValidator.isValid) {
+                        const formData = new FormData(this.element as HTMLFormElement);
+                        this.authAPI.signin({
+                            login: formData.get('login') as string,
+                            password: formData.get('password') as string,
+                        }).then(() => {
+                            localStorage.setItem('isAuth', 'true');
+                            this.router.go('/messenger');
+                            window.location.reload();
+                        }).catch((error) => {
+                            const errorMsg = JSON.parse(error as string).reason;
+                            if(errorMsg === 'User already in system') {
+                                localStorage.setItem('isAuth', 'true');
+                                this.router.go('/messenger');
+                                window.location.reload();
+                            };
+                            this.children.Modal.setProps({
+                                text: errorMsg,
+                                class: 'show',
+                            });
+                        });
+                    }
+                },
+            }),
+            Modal: new Modal({
+                text: '',
+            }),
+            RegistrationLink: new Link({
+                href: '/sign-up',
+                text: 'Регистрация',
+                class: '',
+                onClick: (event: Event) => {
+                    console.log(event.target);
                 },
             }),
             PasswordLink: new Link({
                 href: '',
-                datapage: 'lostPassword',
                 text: 'Забыли пароль?',
                 class: '',
                 onClick: (event: Event) => {
@@ -67,8 +97,10 @@ export class Auth extends Block {
         </div>
         <div class="form-actions">
             {{{ Button }}}
+            {{{ RegistrationLink }}}
             {{{ PasswordLink }}}
         </div>
+        {{{ Modal }}}
         </form>`;
     }
 }
