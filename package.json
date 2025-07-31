@@ -19,7 +19,8 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "lint:style": "stylelint \"**/*.pcss\"",
-    "lint:style:fix": "stylelint \"**/*.pcss\" --fix"
+    "lint:style:fix": "stylelint \"**/*.pcss\" --fix",
+    "prepare": "husky || true"
   },
   "husky": {
     "hooks": {
