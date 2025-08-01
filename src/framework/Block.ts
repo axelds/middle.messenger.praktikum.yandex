@@ -224,7 +224,6 @@ export default class Block {
     }
 
     private _makePropsProxy(props: any): any {
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this;
 
         return new Proxy(props, {

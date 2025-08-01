@@ -1,14 +1,14 @@
 import js from "@eslint/js";
 import globals from "globals";
 import { defineConfig } from "eslint/config";
-import babelParser from "@babel/eslint-parser";
+import typescriptParser from "@typescript-eslint/parser";
 
 export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], plugins: { js }, extends: ["js/recommended"] },
   { 
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], 
     languageOptions: { 
-      parser: babelParser, 
+      parser: typescriptParser, 
       parserOptions: {
         requireConfigFile: false,
         babelOptions: {
