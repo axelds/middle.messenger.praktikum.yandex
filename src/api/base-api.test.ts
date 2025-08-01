@@ -1,4 +1,5 @@
 import { BaseAPI } from "./base-api";
+import { API_URLS } from '../framework/Constants';
 
 class TestAuthAPI extends BaseAPI {
     constructor() {
@@ -15,7 +16,7 @@ describe('BaseAPI', () => {
     test('should have a baseUrl', () => {
         const api = new TestAuthAPI();
         // @ts-ignore
-        expect(api.baseUrl).toBe('https://ya-praktikum.tech/api/v2/auth');
+        expect(api.baseUrl).toBe(API_URLS.BASE_URL + '/auth');
     });
 
     test('should have a headers', () => {

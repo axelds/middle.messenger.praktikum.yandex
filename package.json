@@ -24,7 +24,8 @@
     "test": "jest"
   },
   "lint-staged": {
-    "*.pcss": "npm run lint:style"
+    "**/*.{css,pcss}": ["stylelint"],
+    "**/*.{js,ts}": ["eslint"]
   },
   "devDependencies": {
     "@babel/core": "^7.27.7",

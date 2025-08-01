@@ -3,32 +3,37 @@ import HttpTransport from './HTTPTransport';
 describe('HTTPTransport', () => {
     const transport = new HttpTransport();
 
-    test('should be defined', () => {
-        expect(transport).toBeDefined();
+    test('should be an instance of HttpTransport', () => {
+        expect(transport).toBeInstanceOf(HttpTransport);
     });
 
-    test('request should be defined', () => {
-        expect(transport.request).toBeDefined();
+    test('should have a request method', () => {
+        expect(transport.request).toBeInstanceOf(Function);
+    });
+    
+    test.each([
+        ['get', 'GET'],
+        ['post', 'POST'],
+        ['put', 'PUT'],
+        ['patch', 'PATCH'],
+        ['delete', 'DELETE']
+    ])('should call request with correct parameters for %s method', async (method, httpMethod) => {
+        const spy = jest.spyOn(transport, 'request').mockResolvedValue('');
+        const url = '/test-url';
+        const options = { method: httpMethod };
+
+        await (transport as any)[method](url);
+
+        expect(spy).toHaveBeenCalledWith(url, expect.objectContaining(options));
     });
 
-    test('should have get method', () => {
-        expect(transport.get).toBeDefined();
+    test('should return a resolved promise for successful request', async () => {
+        jest.spyOn(transport, 'request').mockResolvedValue('success');
+        await expect(transport.get('/test-url')).resolves.toBe('success');
     });
 
-    test('should have post method', () => {
-        expect(transport.post).toBeDefined();
+    test('should return a rejected promise for failed request', async () => {
+        jest.spyOn(transport, 'request').mockRejectedValue('error');
+        await expect(transport.get('/test-url')).rejects.toBe('error');
     });
-
-    test('should have put method', () => {
-        expect(transport.put).toBeDefined();
-    });
-
-    test('should have patch method', () => {
-        expect(transport.patch).toBeDefined();
-    });
-
-    test('should have delete method', () => {
-        expect(transport.delete).toBeDefined();
-    });
-
 });
