@@ -42,7 +42,7 @@ npm run start
 Реализованы тесты для:
 
 * Route (framework/Route.test.ts)
-* Block (framewerk/Block.test.ts)
+* Block (framework/Block.test.ts)
 * Component (framework/Link.test.ts)
 * API requests (api/base-api.test.ts)
 * HTTP Transport (framework/HTTPTransport.test.ts)
